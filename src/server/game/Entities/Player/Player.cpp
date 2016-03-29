@@ -29976,7 +29976,7 @@ Pet* Player::SummonPet(uint32 entry, float x, float y, float z, float ang, uint3
     pet->SetUInt32Value(UNIT_FIELD_PETEXPERIENCE, 0);
     pet->SetUInt32Value(UNIT_FIELD_PETNEXTLEVELEXP, 1000);
     pet->SetFullHealth();
-    pet->SetPower(POWER_MANA, pet->GetMaxPower(POWER_MANA));
+    pet->SetPower(pet->getPowerType(), pet->GetMaxPower(pet->getPowerType()));
     pet->SetUInt32Value(UNIT_FIELD_PET_NAME_TIMESTAMP, uint32(time(NULL))); // cast can't be helped in this case
 
     map->AddToMap(pet->ToCreature());
