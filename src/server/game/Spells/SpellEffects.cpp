@@ -3240,8 +3240,10 @@ void Spell::EffectSummonType(SpellEffIndex effIndex)
                 case SUMMON_TYPE_GUARDIAN:
                 case SUMMON_TYPE_GUARDIAN2:
                 case SUMMON_TYPE_MINION:
+                {
                     SummonGuardian(effIndex, entry, properties, numSummons);
                     break;
+                }
                 // Summons a vehicle, but doesn't force anyone to enter it (see SUMMON_CATEGORY_VEHICLE)
                 case SUMMON_TYPE_VEHICLE:
                 case SUMMON_TYPE_VEHICLE2:
@@ -7307,6 +7309,25 @@ void Spell::EffectGameObjectSetDestructionState(SpellEffIndex effIndex)
     gameObjTarget->SetDestructibleState(GameObjectDestructibleState(m_spellInfo->Effects[effIndex].MiscValue), player, true);
 }
 
+enum spells
+{
+    SPELL_AXE_TOSS_STUN         = 89766,
+    SPELL_SPELL_LOCK            = 19647,
+    SPELL_SEDUCTION_GRIMOIRE    = 6358,
+    SPELL_SUFFERING_TAUNT       = 17735,
+    SPELL_SINGLE_MAGIC          = 89808,
+    SPELL_FIREBOLT              = 3110
+};
+
+enum grimoire
+{
+    SPELL_GRIMOIRE_IMP = 111859,
+    SPELL_GRIMOIRE_VOIDWALKER = 111895,
+    SPELL_GRIMOIRE_SUCCUBUS = 111896,
+    SPELL_GRIMOIRE_FELHUNTER = 111897,
+    SPELL_GRIMOIRE_FELGUARD = 111898
+};
+
 void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* properties, uint32 numGuardians)
 {
     Unit* caster = m_originalCaster;
@@ -7462,6 +7483,34 @@ void Spell::SummonGuardian(uint32 i, uint32 entry, SummonPropertiesEntry const* 
                     summon->SetReactState(REACT_PASSIVE);
                     summon->GetAI()->SetGUID(m_targets.GetUnitTargetGUID());
                 }
+                break;
+            }
+            case ENTRY_IMP:
+            case ENTRY_FELHUNTER:
+            case ENTRY_SUCCUBUS:
+            case ENTRY_VOIDWALKER:
+            case ENTRY_FELGUARD:
+            {
+                uint32 spellId = GetSpellInfo()->Id;
+                if (spellId != SPELL_GRIMOIRE_IMP 
+                    && spellId != SPELL_GRIMOIRE_VOIDWALKER 
+                    && spellId != SPELL_GRIMOIRE_SUCCUBUS 
+                    && spellId != SPELL_GRIMOIRE_FELHUNTER 
+                    && spellId != SPELL_GRIMOIRE_FELGUARD)
+                    return;
+
+                spellId = 0;
+                switch (summon->GetEntry())
+                {
+                    case ENTRY_IMP: spellId = SPELL_SINGLE_MAGIC; break;
+                    case ENTRY_VOIDWALKER: spellId = SPELL_SUFFERING_TAUNT; break;
+                    case ENTRY_SUCCUBUS: spellId = SPELL_SEDUCTION_GRIMOIRE; break;
+                    case ENTRY_FELHUNTER: spellId = SPELL_SPELL_LOCK; break;
+                    case ENTRY_FELGUARD: spellId = SPELL_AXE_TOSS_STUN; break;
+                }
+
+                summon->CastSpell(summon->GetEntry() == ENTRY_IMP ? GetCaster() : m_targets.GetUnitTarget(), spellId);
+                summon->AI()->AttackStart(m_targets.GetUnitTarget());
                 break;
             }
         }

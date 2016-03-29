@@ -2407,6 +2407,11 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
                             case 69792:
                             case 69791:
                             case 62261: // Decoy
+                            case 416:
+                            case 417:
+                            case 1860:
+                            case 1863:
+                            case 17252: // Grimoire of Service
                             {
                                 mask = UNIT_MASK_GUARDIAN;
                                 break;
@@ -2486,6 +2491,8 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
     summon->InitStats(duration);
     AddToMap(summon->ToCreature());
     summon->InitSummon();
+
+    summon->AI()->AfterSummon(summoner, target, spellId);
 
     //ObjectAccessor::UpdateObjectVisibility(summon);
 

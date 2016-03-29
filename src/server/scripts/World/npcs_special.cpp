@@ -4723,7 +4723,7 @@ class npc_glyph_of_decoy : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE);
             }
 
-            void AfterSummon(Unit* summoner, Unit* /*target*/)
+            void AfterSummon(Unit* summoner, Unit* /*target*/, uint32 spell)
             {
                 if (Player* owner = summoner->ToPlayer())
                 {
@@ -4742,25 +4742,25 @@ class npc_s_e_f : public CreatureScript
 {
     public:
         npc_s_e_f() : CreatureScript("npc_s_e_f") { }
-
+ 
         CreatureAI *GetAI(Creature* pCreature) const
         {
             return new npc_s_e_fAI(pCreature);
         }
-
+ 
         struct npc_s_e_fAI : public ScriptedAI
         {
             npc_s_e_fAI(Creature* pCreature) : ScriptedAI(pCreature)
             {
             }
-
+ 
             enum _npcs
             {
                 NPC_ENTRY_STORM = 69680,
                 NPC_ENTRY_EARTH = 69792,
                 NPC_ENTRY_FIRE = 69791
             };
-
+ 
             enum _spells
             {
                 SPELL_STORM_VISUAL = 138080,
@@ -4769,7 +4769,7 @@ class npc_s_e_f : public CreatureScript
                 SPELL_S_E_F_FLY = 138104,
                 SPELL_S_E_F = 137639
             };
-
+ 
             void JustDied(Unit* killer)
             {
                 if (Unit* owner = me->GetCharmerOrOwner())
@@ -4780,18 +4780,13 @@ class npc_s_e_f : public CreatureScript
                         else
                             aura->Remove();
                     }
-
+ 
                 me->RemoveAllAuras();
                 me->DisappearAndDie();
             }
-
-            void EnterCombat(Unit* target)
-            {
-                target->IsValidAttackTarget(target);
-                if (!target->IsWithinMeleeRange(me))
-                    me->CastSpell(target, SPELL_S_E_F_FLY, true);
-            }
-
+ 
+            void EnterCombat(Unit* target) {}
+ 
             void EnterEvadeMode()
             {
                 me->DeleteThreatList();
@@ -4800,10 +4795,21 @@ class npc_s_e_f : public CreatureScript
                 me->SetLootRecipient(NULL);
                 me->ResetPlayerDamageReq();
             }
-
-            void AfterSummon(Unit* summoner, Unit* target)
+ 
+            void SpellHit(Unit* caster, const SpellInfo* spell)
             {
-                if (Player* owner = summoner->ToPlayer())
+                if (caster->ToPlayer() == owner)
+                    if (me->GetVictim() != owner->GetSelectedUnit())
+                        me->CastSpell(me->GetVictim(), spell->Id, false);
+            }
+ 
+            Player* owner;
+ 
+            void AfterSummon(Unit* summoner, Unit* target, uint32 spell)
+            {
+                owner = summoner->ToPlayer();
+ 
+                if (owner)
                 {
                     owner->CastSpell(me, 45204, true); // clone me
                     switch (me->GetEntry())
@@ -4811,24 +4817,46 @@ class npc_s_e_f : public CreatureScript
                         case NPC_ENTRY_STORM:
                         {
                             me->AddAura(SPELL_STORM_VISUAL, me);
+                            if (Unit* target = owner->GetSelectedUnit())
+                                if (!target->IsWithinMeleeRange(me))
+                                    me->CastSpell(target, SPELL_S_E_F_FLY, true);
+ 
                             break;
                         }
                         case NPC_ENTRY_FIRE:
                         {
                             me->AddAura(SPELL_FIRE_VISUAL, me);
+                            if (Unit* target = owner->GetSelectedUnit())
+                                if (!target->IsWithinMeleeRange(me))
+                                    me->CastSpell(target, SPELL_S_E_F_FLY, true);
                             break;
                         }
                         case NPC_ENTRY_EARTH:
                         {
                             me->AddAura(SPELL_EARTH_VISUAL, me);
+                            if (Unit* target = owner->GetSelectedUnit())
+                                if (!target->IsWithinMeleeRange(me))
+                                    me->CastSpell(target, SPELL_S_E_F_FLY, true);
                             break;
                         }
                     }
-
+ 
                     me->Attack(target, true);
                     me->SetAttackTime(BASE_ATTACK, me->GetCharmerOrOwner()->GetAttackTime(BASE_ATTACK));
                     me->setAttackTimer(BASE_ATTACK, me->GetCharmerOrOwner()->getAttackTimer(BASE_ATTACK));
                 }
+            }
+ 
+            void UpdateAI(const uint32 diff)
+            {
+                if (!UpdateVictim())
+                    return;
+ 
+                if (me->HasUnitState(UNIT_STATE_CASTING))
+                    return;
+ 
+                DoMeleeAttackIfReady();
+ 
             }
         };
 };
