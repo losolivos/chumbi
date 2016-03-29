@@ -7931,6 +7931,31 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, uint32 absorb, AuraE
                     triggered_spell_id = 141462;
                     break;
                 }
+                case 146959: // Glyph of Pillar of Light
+                {
+                    if (!victim || GetGUID() == victim->GetGUID() || !victim->IsAlive())
+                        return false;
+
+                    if (!procSpell)
+                        return false;
+
+                    switch (procSpell->Id)
+                    {
+                        case 82327: // Holy Radiance
+                        case 119952:// Light's Hammer
+                        case 114871:// Holy Prism
+                        case 85222: // Light of Dawn
+                            return false;
+                        default:
+                            break;
+                    }
+
+                    if (!(procEx & PROC_EX_CRITICAL_HIT))
+                        return false;
+
+                    CastSpell(target, 148064, true); // Pillar of Light
+                    break;
+                }
                 break;
             }
             // Seal of Command
