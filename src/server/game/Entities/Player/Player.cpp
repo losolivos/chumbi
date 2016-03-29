@@ -30243,3 +30243,210 @@ void Player::SetLastKilledCreature(Creature* creature)
     else
         m_lastKilledCreatureId = creature->GetEntry();
 }
+
+// Custom Function used in Spell_cooking to Find main Stat for each Class and Spec...
+// Get classId
+// return statId
+uint32 Player::GetStatForSpec(uint32 classId)
+{
+    uint32 statId = 0;
+
+    switch (classId)
+    {
+        case CLASS_WARRIOR:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_WARRIOR_FURY:
+                case SPEC_WARRIOR_ARMS:
+                    statId = STAT_STRENGTH;
+                    break;
+                case SPEC_WARRIOR_PROTECTION:
+                    statId = STAT_STAMINA;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_STRENGTH;
+                    break;
+            }
+        }
+            break;
+        case CLASS_PALADIN:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_PALADIN_PROTECTION:
+                    statId = STAT_STAMINA;
+                    break;
+                case SPEC_PALADIN_HOLY:
+                    statId = STAT_SPIRIT;
+                    break;
+                case SPEC_PALADIN_RETRIBUTION:
+                    statId = STAT_STRENGTH;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_STRENGTH;
+                    break;
+            }
+        }
+            break;
+        case CLASS_HUNTER:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_HUNTER_BEASTMASTER:
+                case SPEC_HUNTER_MARKSMAN:
+                case SPEC_HUNTER_SURVIVAL:
+                    statId = STAT_AGILITY;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_AGILITY;
+                    break;
+            }
+        }
+            break;
+        case CLASS_ROGUE:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_ROGUE_ASSASSINATION:
+                case SPEC_ROGUE_COMBAT:
+                case SPEC_ROGUE_SUBTLETY:
+                    statId = STAT_AGILITY;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_AGILITY;
+                    break;
+            }
+        }
+            break;
+        case CLASS_PRIEST:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_PRIEST_DISCIPLINE:
+                case SPEC_PRIEST_HOLY:
+                    statId = STAT_SPIRIT;
+                    break;
+                case SPEC_PRIEST_SHADOW:
+                    statId = STAT_INTELLECT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_INTELLECT;
+                    break;
+            }
+        }
+            break;
+        case CLASS_DEATH_KNIGHT:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_DK_FROST:
+                case SPEC_DK_UNHOLY:
+                    statId = STAT_STRENGTH;
+                    break;
+                case SPEC_DK_BLOOD:
+                    statId = STAT_STAMINA;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_STRENGTH;
+                    break;
+            }
+        }
+            break;
+        case CLASS_SHAMAN:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_SHAMAN_ELEMENTAL:
+                    statId = STAT_INTELLECT;
+                    break;
+                case SPEC_SHAMAN_ENHANCEMENT:
+                    statId = STAT_AGILITY;
+                    break;
+                case SPEC_SHAMAN_RESTORATION:
+                    statId = STAT_SPIRIT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_INTELLECT;
+                    break;
+            }
+        }
+            break;
+        case CLASS_MAGE:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_MAGE_FIRE:
+                case SPEC_MAGE_ARCANE:
+                case SPEC_MAGE_FROST:
+                    statId = STAT_INTELLECT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_INTELLECT;
+                    break;
+            }
+        }
+            break;
+        case CLASS_WARLOCK:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_WARLOCK_AFFLICTION:
+                case SPEC_WARLOCK_DEMONOLOGY:
+                case SPEC_WARLOCK_DESTRUCTION:
+                    statId = STAT_INTELLECT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_INTELLECT;
+                    break;
+            }
+        }
+            break;
+        case CLASS_MONK:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_MONK_BREWMASTER:
+                    statId = STAT_STAMINA;
+                    break;
+                case SPEC_MONK_WINDWALKER:
+                    statId = STAT_AGILITY;
+                    break;
+                case SPEC_MONK_MISTWEAVER:
+                    statId = STAT_SPIRIT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_AGILITY;
+                    break;
+            }
+        }
+            break;
+        case CLASS_DRUID:
+        {
+            switch (GetSpecializationId(GetActiveSpec()))
+            {
+                case SPEC_DRUID_GUARDIAN:
+                    statId = STAT_STAMINA;
+                    break;
+                case SPEC_DRUID_FERAL:
+                    statId = STAT_AGILITY;
+                    break;
+                case SPEC_DRUID_RESTORATION:
+                    statId = STAT_SPIRIT;
+                    break;
+                case SPEC_DRUID_BALANCE:
+                    statId = STAT_INTELLECT;
+                    break;
+                default: // SPEC_NONE
+                    statId = STAT_AGILITY;
+                    break;
+            }
+        }
+            break;
+        default: // CLASS_NONE
+            statId = STAT_STAMINA;
+        break;
+    }
+
+    return statId;
+}

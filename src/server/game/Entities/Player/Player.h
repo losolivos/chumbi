@@ -2153,6 +2153,8 @@ class Player final : public Unit, public GridObject<Player>
         void RepopAtGraveyard();
         void SendCemeteryList(bool onMap);
 
+        uint32 GetStatForSpec(uint32 classId);
+
         uint32 GetLastKilledCreature() { return m_lastKilledCreatureId; }
         void SetLastKilledCreature(Creature* creature);
 

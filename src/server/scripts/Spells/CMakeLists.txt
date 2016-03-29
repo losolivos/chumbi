@@ -28,6 +28,7 @@ set(scripts_STAT_SRCS
   Spells/spell_monk.cpp
   Spells/spell_mastery.cpp
   Spells/spell_areatrigger.cpp
+  Spells/spell_cooking.cpp
 )
 
 message("  -> Prepared: Spells")

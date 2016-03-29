@@ -42,6 +42,7 @@ void AddSC_mastery_spell_scripts();
 void AddSC_quest_spell_scripts();
 void AddSC_item_spell_scripts();
 void AddSC_holiday_spell_scripts();
+void AddSC_cooking_spell_scripts();
 
 void AddSC_SmartSCripts();
 void AddSC_spell_areatrigger_scripts();
@@ -797,6 +798,7 @@ void AddSpellScripts()
     AddSC_quest_spell_scripts();
     AddSC_item_spell_scripts();
     AddSC_holiday_spell_scripts();
+    AddSC_cooking_spell_scripts();
     AddSC_spell_areatrigger_scripts();
 }
 
