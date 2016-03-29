@@ -1721,6 +1721,10 @@ void Spell::EffectJumpDest(SpellEffIndex effIndex)
         orientation = m_targets.GetUnitTarget()->GetOrientation();
     m_caster->AddUnitState(UNIT_STATE_JUMPING);
 
+    // Instantly interrupt non melee spells being casted
+    if (m_caster->IsNonMeleeSpellCasted(true))
+        m_caster->InterruptNonMeleeSpells(true);
+
     switch (m_spellInfo->Id)
     {
         case 49575: // Death Grip
@@ -6060,15 +6064,21 @@ void Spell::EffectResurrect(SpellEffIndex effIndex)
     uint32 health = target->CountPctFromMaxHealth(damage);
     uint32 mana   = CalculatePct(target->GetMaxPower(POWER_MANA), damage);
 
-    // Rebirth, soulstone ...
-    if (m_spellInfo->Id == 20484 || m_spellInfo->Id == 3026)
+    if (m_spellInfo->Id == 3026) // Soulstone
         health = target->CountPctFromMaxHealth(60);
 
     if (m_spellInfo->Id == 61999) // Raise Ally
         mana = target->CountPctFromMaxMana(60);
 
-    // Rebirth (Symbiosis)
-    if (m_spellInfo->Id == 113269)
+    if (m_spellInfo->Id == 20484) // Rebirth
+    {
+        if (m_caster->HasAura(54733)) // Glyph of Rebirth
+            health = target->CountPctFromMaxHealth(100);
+        else
+            health = target->CountPctFromMaxHealth(60);
+    }
+
+    if (m_spellInfo->Id == 113269) // Rebirth (Symbiosis)
     {
         health = target->CountPctFromMaxHealth(60);
         mana = target->CountPctFromMaxMana(20);
