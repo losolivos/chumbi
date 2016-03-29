@@ -3361,7 +3361,7 @@ bool Spell::UpdateChanneledTargetList()
                 {
                     if (AuraApplication * aurApp = unit->GetAuraApplication(m_spellInfo->Id, m_originalCasterGUID))
                     {
-                        if (m_caster != unit && !m_caster->IsWithinDistInMap(unit, range))
+                        if (m_caster != unit && (!m_caster->IsWithinDistInMap(unit, range) || !m_caster->IsWithinLOSInMap(unit)))
                         {
                             ihit->effectMask &= ~aurApp->GetEffectMask();
                             unit->RemoveAura(aurApp);
