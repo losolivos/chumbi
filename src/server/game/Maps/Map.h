@@ -470,7 +470,7 @@ class Map
 
         void UpdateIteratorBack(Player* player);
 
-        TempSummon* SummonCreature(uint32 entry, Position const& pos, SummonPropertiesEntry const* properties = NULL, uint32 duration = 0, Unit* summoner = NULL, uint32 spellId = 0, uint32 vehId = 0);
+        TempSummon* SummonCreature(uint32 entry, Position const& pos, SummonPropertiesEntry const* properties = NULL, uint32 duration = 0, Unit* summoner = NULL, uint32 spellId = 0, uint32 vehId = 0, Unit* target = NULL);
         void SummonCreatureGroup(uint8 group, std::list<TempSummon*>& list);
         Creature* GetCreature(uint64 guid);
         GameObject* GetGameObject(uint64 guid);
