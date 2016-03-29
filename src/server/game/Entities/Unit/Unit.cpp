@@ -16098,7 +16098,7 @@ uint32 Unit::GetPowerIndex(uint32 powerType) const
 
     if (Pet const* pet = ToPet())
     {
-        if (pet->isWarlockPet() && pet->getPetType() == SUMMON_PET && powerType == POWER_ENERGY)
+        if (pet->IsWarlockPet() && pet->getPetType() == SUMMON_PET && powerType == POWER_ENERGY)
             return 0;
     }
 
