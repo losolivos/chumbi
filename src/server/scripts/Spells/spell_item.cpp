@@ -2305,6 +2305,138 @@ public:
     }
 };
 
+class spell_item_celestial_cloth_mop : public SpellScriptLoader
+{
+public:
+    spell_item_celestial_cloth_mop() : SpellScriptLoader("spell_item_celestial_cloth_mop") { }
+
+    class spell_item_celestial_cloth_mop_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_celestial_cloth_mop_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        void HandleOnHit()
+        {
+            uint8 chance = urand(1, 5); // not official, todo: find the rate
+            Player* caster = GetCaster()->ToPlayer();
+
+            if (caster && GetCaster()->GetTypeId() == TYPEID_PLAYER && !HasDiscoveredAllSpells(143011, GetCaster()->ToPlayer()) && chance == 1)
+            {
+                if (uint32 discoveredSpellId = GetExplicitDiscoverySpell(143011, caster->ToPlayer()))
+                    caster->learnSpell(discoveredSpellId, false);
+            }
+        }
+
+        void Register()
+        {
+            OnHit += SpellHitFn(spell_item_celestial_cloth_mop_SpellScript::HandleOnHit);
+        }
+
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_celestial_cloth_mop_SpellScript();
+    }
+};
+
+enum Recipes
+{
+    CELESTIAL_CLOTH             = 143011,
+    ACCELERATED_CELESTIAL_CLOTH = 146925,
+};
+
+// Called By Celestial Cloth and Its Uses - 143626
+class spell_item_celestial_cloth_and_its_uses : public SpellScriptLoader
+{
+public:
+    spell_item_celestial_cloth_and_its_uses() : SpellScriptLoader("spell_item_celestial_cloth_and_its_uses") { }
+
+    class spell_item_celestial_cloth_and_its_uses_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_celestial_cloth_and_its_uses_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        void HandleOnHit()
+        {
+            if (Player* caster = GetCaster()->ToPlayer())
+            {
+                uint8 chance = urand(1, 5); // not official, todo: find the rate
+
+                if (!caster->HasSpell(CELESTIAL_CLOTH))
+                    caster->learnSpell(CELESTIAL_CLOTH, false);
+
+                if (!caster->HasSpell(ACCELERATED_CELESTIAL_CLOTH))
+                    caster->learnSpell(ACCELERATED_CELESTIAL_CLOTH, false);
+
+                if (caster && GetCaster()->GetTypeId() == TYPEID_PLAYER && !HasDiscoveredAllSpells(143011, GetCaster()->ToPlayer()) && chance == 1)
+                {
+                    if (uint32 discoveredSpellId = GetExplicitDiscoverySpell(143011, caster->ToPlayer()))
+                        caster->learnSpell(discoveredSpellId, false);
+                }
+            }       
+        }
+
+        void Register()
+        {
+            OnHit += SpellHitFn(spell_item_celestial_cloth_and_its_uses_SpellScript::HandleOnHit);
+        }
+
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_celestial_cloth_and_its_uses_SpellScript();
+    }
+};
+
+class spell_item_imperial_silk_mop : public SpellScriptLoader
+{
+public:
+    spell_item_imperial_silk_mop() : SpellScriptLoader("spell_item_imperial_silk_mop") { }
+
+    class spell_item_imperial_silk_mop_SpellScript : public SpellScript
+    {
+        PrepareSpellScript(spell_item_imperial_silk_mop_SpellScript);
+
+        bool Load()
+        {
+            return GetCaster()->GetTypeId() == TYPEID_PLAYER;
+        }
+
+        void HandleOnHit()
+        {
+            uint8 chance = urand(1, 5); // not official, todo: find the rate
+            Player* caster = GetCaster()->ToPlayer();
+
+            if (caster && GetCaster()->GetTypeId() == TYPEID_PLAYER && !HasDiscoveredAllSpells(125557, GetCaster()->ToPlayer()))
+            {
+                if (uint32 discoveredSpellId = GetExplicitDiscoverySpell(125557, caster->ToPlayer()) && chance == 1)
+                    caster->learnSpell(discoveredSpellId, false);
+            }
+        }
+
+        void Register()
+        {
+            OnHit += SpellHitFn(spell_item_imperial_silk_mop_SpellScript::HandleOnHit);
+        }
+
+    };
+
+    SpellScript* GetSpellScript() const
+    {
+        return new spell_item_imperial_silk_mop_SpellScript();
+    }
+};
+
 //146194 Flurry of Xuen
 class spell_item_flurry_of_xuen : public SpellScriptLoader
 {
@@ -2409,5 +2541,8 @@ void AddSC_item_spell_scripts()
     new spell_alchemist_rejuvenation();
     new spell_item_dragonwrath_tarecgosas_rest();
     new spell_item_zen_alchemist_stone();
+    new spell_item_celestial_cloth_mop();
+    new spell_item_celestial_cloth_and_its_uses();
+    new spell_item_imperial_silk_mop();
     new spell_item_flurry_of_xuen();
 }
