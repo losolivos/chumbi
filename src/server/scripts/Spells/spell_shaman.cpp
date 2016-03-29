@@ -89,6 +89,7 @@ enum ShamanSpells
     SPELL_SHA_GLYPH_OF_SHAMANISTIC_RAGE     = 63280,
     SPELL_SHA_GHOST_WOLF                    = 2645,
     SPELL_SHA_ITEM_T14_4P                   = 123124,
+    SPELL_SHA_RAIN_OF_FROGS                 = 147709,
     SPELL_SHA_GLYPH_OF_HEALING_STREAM_TOTEM = 55456
 };
 
