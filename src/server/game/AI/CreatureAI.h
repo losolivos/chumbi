@@ -115,7 +115,7 @@ class CreatureAI : public UnitAI
         virtual void JustSummoned(Creature* /*summon*/) {}
         virtual void IsSummonedBy(Unit* /*summoner*/) {}
 
-        virtual void AfterSummon(Unit* /*summoner*/, Unit* /*target*/) {}
+        virtual void AfterSummon(Unit* /*summoner*/, Unit* /*target*/, uint32 /*spell*/) {}
 
         virtual void JustUnsummoned(Unit* /*summoner*/) {}
 

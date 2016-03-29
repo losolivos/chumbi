@@ -2491,7 +2491,7 @@ TempSummon* Map::SummonCreature(uint32 entry, Position const& pos, SummonPropert
     summon->InitStats(duration);
     AddToMap(summon->ToCreature());
     summon->InitSummon();
-    
+
     summon->AI()->AfterSummon(summoner, target, spellId);
 
     //ObjectAccessor::UpdateObjectVisibility(summon);
