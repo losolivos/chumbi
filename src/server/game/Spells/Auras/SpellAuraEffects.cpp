@@ -4257,6 +4257,8 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
                 aura_immunity_list.push_back(SPELL_AURA_MOD_CONFUSE);
                 aura_immunity_list.push_back(SPELL_AURA_MOD_FEAR);
                 aura_immunity_list.push_back(SPELL_AURA_MOD_FEAR_2);
+
+                target->CastSpell(target, 118009, true);
             }
             break;
         }
