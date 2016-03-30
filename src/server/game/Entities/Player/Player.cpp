@@ -22698,7 +22698,13 @@ void Player::Whisper(const std::string& text, uint32 language, uint64 receiver)
 
     // when player you are whispering to is dnd, he cannot receive your message, unless you are in gm mode
     if (!rPlayer->isDND() || isGameMaster())
-    {
+    { 
+        if (rPlayer->GetSocial()->HasIgnore(GetGUIDLow()))
+        {
+            ChatHandler(this).PSendSysMessage("|cffFF0000%s is ignoring you.", rPlayer->GetName().c_str());
+            return;
+        }
+
         WorldPacket data;
         BuildPlayerChat(&data, CHAT_MSG_WHISPER, _text, language);
         rPlayer->GetSession()->SendPacket(&data);

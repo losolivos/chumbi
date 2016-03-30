@@ -28,6 +28,7 @@
 #include "Player.h"
 #include "CreatureAI.h"
 #include "Spell.h"
+#include "SocialMgr.h"
 
 namespace Trinity
 {
@@ -105,6 +106,9 @@ namespace Trinity
                 return;
 
             if (!player->HaveAtClient(i_source))
+                return;
+            
+            if (i_message->GetOpcode() == SMSG_MESSAGE_CHAT && player->GetSocial()->HasIgnore(i_source->GetGUIDLow()))
                 return;
 
             if (WorldSession* session = player->GetSession())
