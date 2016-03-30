@@ -12967,7 +12967,7 @@ uint32 Unit::SpellHealingBonusDone(Unit* victim, SpellInfo const* spellProto, ui
     // Apply Power PvP healing bonus
     if (healamount > 0
             && GetTypeId() == TYPEID_PLAYER
-            && GetMap()->IsBattlegroundOrArena()
+            /*&& GetMap()->IsBattlegroundOrArena()*/
             && (victim->GetTypeId() == TYPEID_PLAYER || (victim->isPet() && IS_PLAYER_GUID(victim->GetOwnerGUID()))))
     {
         AddPct(DoneTotalMod, GetFloatValue(PLAYER_FIELD_PVP_POWER_HEALING));
