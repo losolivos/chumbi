@@ -1807,7 +1807,7 @@ void Player::Update(uint32 p_time)
                     // Shuriken Toss - Main Hand
                     else if (HasAura(137586))
                     {
-                        CastSpell(victim, 140308, true);
+                        CastSpell(victim, 140308);
                         resetAttackTimer(BASE_ATTACK);
                     }
                     // Shadow Blade - Main Hand
@@ -1846,7 +1846,7 @@ void Player::Update(uint32 p_time)
                     // Shuriken Toss - Off-Hand
                     else if (HasAura(137586))
                     {
-                        CastSpell(victim, 140309, true);
+                        CastSpell(victim, 140309);
                         resetAttackTimer(OFF_ATTACK);
                     }
                     // Shadow Blades - Off Hand
