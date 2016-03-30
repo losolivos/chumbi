@@ -1817,6 +1817,23 @@ void Spell::SelectImplicitTargetObjectTargets(SpellEffIndex effIndex, SpellImpli
         else if (GameObject* gobj = target->ToGameObject())
             AddGOTarget(gobj, 1 << effIndex);
 
+        if (targetType.GetTarget() == TARGET_PARTY_IF_UNIT_PARTY)
+        {
+            if (Player* caster = GetCaster()->ToPlayer())
+            {
+                if (Player* _target = target->ToPlayer())
+                {
+                    if (caster->GetGroup() && _target->GetGroup() && caster->GetGroup()->GetGUID() == _target->GetGroup()->GetGUID())
+                    {
+                        std::list<Unit*> members;
+                        caster->GetPartyMembers(members);
+                        for (auto itr: members)
+                            AddUnitTarget(itr, 1 << effIndex, m_redirected == true ? false : true, false, effIndex);
+                    }
+                }
+            }
+        }
+
         SelectImplicitChainTargets(effIndex, targetType, target, 1 << effIndex);
     }
     // Script hook can remove object target and we would wrongly land here
